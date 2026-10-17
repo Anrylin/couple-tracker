@@ -1,0 +1,34 @@
+name: iOS Build (unsigned IPA)
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build unsigned app
+        run: |
+          xcodebuild -project ios-app/CoupleTracker.xcodeproj \
+            -target CoupleTracker \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build
+
+      - name: Package unsigned IPA
+        run: |
+          APP_DIR=build/Build/Products/Release-iphoneos
+          APP=$(ls -d "$APP_DIR"/*.app | head -1)
+          rm -rf Payload
+          mkdir Payload
+          cp -r "$APP" Payload/
+          zip -r ios-unsigned.ipa Payload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-unsigned-ipa
+          path: ios-unsigned.ipa

@@ -30,7 +30,7 @@ class StatsViewController: UIViewController, UICollectionViewDataSource,
 
     // MARK: - 初始化
 
-    override init(nibName: nil, bundle: nil) {
+    init() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 12

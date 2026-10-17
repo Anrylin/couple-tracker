@@ -9,10 +9,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: List schemes
+        run: xcodebuild -project ios-app/CoupleTracker.xcodeproj -list
+
       - name: Build unsigned app
         run: |
+          set -x
           xcodebuild -project ios-app/CoupleTracker.xcodeproj \
-            -target CoupleTracker \
+            -scheme CoupleTracker \
             -configuration Release \
             -sdk iphoneos \
             -derivedDataPath build \
@@ -21,12 +25,15 @@ jobs:
 
       - name: Package unsigned IPA
         run: |
+          set -e
           APP_DIR=build/Build/Products/Release-iphoneos
           APP=$(ls -d "$APP_DIR"/*.app | head -1)
+          echo "APP=$APP"
           rm -rf Payload
           mkdir Payload
           cp -r "$APP" Payload/
           zip -r ios-unsigned.ipa Payload
+          ls -la ios-unsigned.ipa
 
       - uses: actions/upload-artifact@v4
         with:

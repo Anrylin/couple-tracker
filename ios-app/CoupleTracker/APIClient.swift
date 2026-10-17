@@ -52,10 +52,11 @@ struct LocationRow: Codable {
     var speed: Double?
     var battery_level: Int?
     var is_moving: Bool
+    var created_at: String?
 
     enum CodingKeys: String, CodingKey {
         case user_id, couple_id, latitude, longitude, accuracy,
-             speed, battery_level, is_moving
+             speed, battery_level, is_moving, created_at
     }
 }
 
@@ -68,10 +69,11 @@ struct AppUsageRow: Codable {
     var category: String?
     var usage_seconds: Int
     var window_start: String?
+    var created_at: String?
 
     enum CodingKeys: String, CodingKey {
         case user_id, couple_id, package_name, app_name,
-             category, usage_seconds, window_start
+             category, usage_seconds, window_start, created_at
     }
 }
 
